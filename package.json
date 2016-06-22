@@ -4,6 +4,7 @@
   "description": "client/server rendered with tagged template strings",
   "main": "app.js",
   "dependencies": {
+    "ecstatic": "^1.4.1",
     "hyperx": "^2.0.3",
     "main-loop": "^3.2.0",
     "redux": "^3.5.2",
