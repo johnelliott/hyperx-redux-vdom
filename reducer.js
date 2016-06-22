@@ -6,7 +6,7 @@ module.exports = function (state, action) {
 
   switch (action.type) {
     case 'INCREMENT':
-      return Object.assign(state, {value: state.value.concat([new Date().valueOf()])})
+      return Object.assign(state, {value: state.value.concat([new Date().toISOString()])})
 
     default:
       return state

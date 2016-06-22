@@ -1,15 +1,16 @@
 const http = require('http')
 const ecstatic = require('ecstatic')
 const vdom = require('virtual-dom')
-const hyperx = require('hyperx')
 const app = require('./app.js')
 
 var staticMiddleware = ecstatic({ root: __dirname + '/public', handleError: true })
 
 var renderPage = function(req, res) {
   res.writeHead(200, {'Content-Type': 'text/html'})
+  // TODO, use app-core.js and change app -> app.render(vdom etc)
+  // then later, do more and bring v-dom into the worker if possible
   const page = `<html>
-  <body>${vdom.create(app({value: [0]})).toString()}</body>
+  <body>${vdom.create(app({value: [10000000000]})).toString()}</body>
   <script src="./bundle.js"></script>
   </html>`
   res.end(page)

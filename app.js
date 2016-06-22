@@ -1,40 +1,10 @@
-var redux = require('redux')
-var vdom = require('virtual-dom')
-var hyperx = require('hyperx')
-var main = require('main-loop')
-
-var reducer = require('./reducer')
-
-var hx = hyperx(vdom.h)
-var store = redux.createStore(reducer)
-var loop = main({value: [0]}, render, vdom)
-
-function item(state) {
-  function onclick () {
-    store.dispatch({ type: 'INCREMENT'})
-  }
-  return hx`<div id='root'><span>${state}</span><button onclick=${onclick}></button></div>`
-}
-
-function list(state) {
-  return hx`<div>${state.value.map(function (d) {
-    return item(d)
-  })}</div>`
-}
-
-function render (state) {
-  return list(state)
-}
-
-function update () {
-  loop.update(store.getState())
-}
-
 /*
-When a file is run directly from Node.js, require.main is set to its module.
-That means that you can determine whether a file has been run directly by testing:
-require.main === module
-*/
+   When a file is run directly from Node.js, require.main is set to its module.
+   That means that you can determine whether a file has been run directly by testing:
+   require.main === module
+   */
+var { store, render, update, loop } = require('./app-core.js')
+
 if (module.parent) {
   console.log('I think I am a module')
   module.exports = render
@@ -44,4 +14,23 @@ if (module.parent) {
   var root = document.body.firstElementChild
   document.body.replaceChild(loop.target, root)
   store.subscribe(update)
+  // set up web workers...
+  var work = require('webworkify')
+  var worker = work(require('./worker.js'))
+  worker.addEventListener('message', function (e) {
+    console.log(e)
+  })
+  console.log('about to start web worker')
+  setTimeout(function(e) {
+    console.log('posting message')
+    console.log(typeof e)
+    console.log(e)
+    var initialState = JSON.stringify([0,1,2,3,4,5])
+    worker.postMessage(initialState)
+  }, 1000)
+
+  setTimeout(function stop(e) {
+    console.log('stopping worker')
+    worker.terminate()
+  }, 4000)
 }
