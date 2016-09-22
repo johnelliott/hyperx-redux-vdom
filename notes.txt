@@ -1,0 +1,28 @@
+export the app as one thing
+
+have entry as another
+
+figure what kind of thing has the file
+
+
+server {
+  module.exports = render
+} else client-side {
+  re-hydrate app
+  do web worker
+}
+
+
+new file called app-core.js
+
+app.js
+require app-core
+require webworkify
+
+if server
+  var render = require('./app-core.js')).render
+  module.exports = render
+else we'r on client
+  work(require('./app-core.js').hydrate)
+
+

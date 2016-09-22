@@ -18,19 +18,17 @@ if (module.parent) {
   var work = require('webworkify')
   var worker = work(require('./worker.js'))
   worker.addEventListener('message', function (e) {
-    console.log(e)
+    console.log('now is when i could set the dom with the data from the worker')
+    console.log('Worker data: ', e.data)
   })
-  console.log('about to start web worker')
-  setTimeout(function(e) {
-    console.log('posting message')
-    console.log(typeof e)
-    console.log(e)
-    var initialState = JSON.stringify([0,1,2,3,4,5])
+  setTimeout(function() {
+    var initialState = JSON.stringify({value: [0,1,2,3,4,5]})
+    console.log('posting message', initialState)
     worker.postMessage(initialState)
   }, 1000)
 
   setTimeout(function stop(e) {
     console.log('stopping worker')
     worker.terminate()
-  }, 4000)
+  }, 60*1000)
 }
